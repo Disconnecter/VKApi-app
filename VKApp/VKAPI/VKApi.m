@@ -217,25 +217,7 @@ BOOL _isCaptcha;
 }
 
 - (void)logout
-{
-//    NSString *logout = [NSString stringWithFormat:@"http://api.vk.com/oauth/logout?client_id=%@", appid];
-//    
-//    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:logout] 
-//                                                           cachePolicy:NSURLRequestReloadIgnoringLocalCacheData 
-//                                                       timeoutInterval:60.0]; 
-//    NSData *responseData = [NSURLConnection sendSynchronousRequest:request 
-//                                                 returningResponse:nil 
-//                                                             error:nil];
-//    if(responseData)
-//    {
-//        NSString *responseString = [[NSString alloc] initWithData:responseData 
-//                                                         encoding:NSUTF8StringEncoding];
-//        SBJsonParser *parser = [[SBJsonParser alloc] init];
-//        NSDictionary *dict = [parser objectWithString:responseString];
-//        [parser release];
-//        [responseString release];
-//        NSLog(@"Logout: %@", dict);
-        
+{        
         NSHTTPCookieStorage* cookies = [NSHTTPCookieStorage sharedHTTPCookieStorage];
         NSArray* vkCookies1 = [cookies cookiesForURL:
                                [NSURL URLWithString:@"http://api.vk.com"]];
@@ -262,9 +244,7 @@ BOOL _isCaptcha;
         {
             [cookies deleteCookie:cookie];
         }
-        
-        // Remove saved authorization information if it exists and it is
-        // ok to clear it (logout, session invalid, app unauthorized)
+
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         if ([defaults objectForKey:@"VKAccessToken"]) 
         {

@@ -43,7 +43,6 @@
         vkWebView.scalesPageToFit = YES;
         [self.view addSubview:vkWebView];
     }
-    // Создаем запрос на авторизацию приложения, указываем appID (код приложения, полученный при регистрации вконтакте по ссылке: http://vkontakte.ru/editapp?act=create&site=1) и нужные нам права, в данном случае это доступ к стене (wall), к фото (photos), чтобы можно было размещать фотографии на стену пользователя.
     
     if(!appID) 
     {
@@ -80,7 +79,6 @@
 - (BOOL)webView:(UIWebView *)aWbView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     
     NSURL *URL = [request URL];
-    // Пользователь нажал Отмена в веб-форме
     if ([[URL absoluteString] isEqualToString:@"http://api.vk.com/blank.html#error=access_denied&error_reason=user_denied&error_description=User%20denied%20your%20request"]) {
         [super dismissModalViewControllerAnimated:YES];
         return NO;
@@ -96,13 +94,13 @@
 
 -(void)webViewDidFinishLoad:(UIWebView *)webView 
 {
-    // Если есть токен сохраняем его
+
     if ([vkWebView.request.URL.absoluteString rangeOfString:@"access_token"].location != NSNotFound) {
         NSString *accessToken = [self stringBetweenString:@"access_token=" 
                                                 andString:@"&" 
                                               innerString:[[[webView request] URL] absoluteString]];
         
-        // Получаем id пользователя, пригодится нам позднее
+
         NSArray *userAr = [[[[webView request] URL] absoluteString] componentsSeparatedByString:@"&user_id="];
         NSString *user_id = [userAr lastObject];
         NSLog(@"User id: %@", user_id);
@@ -112,8 +110,7 @@
         
         if(accessToken){
             [[NSUserDefaults standardUserDefaults] setObject:accessToken forKey:@"VKAccessToken"];
-            // Сохраняем дату получения токена. Параметр expires_in=86400 в ответе ВКонтакта, говорит сколько будет действовать токен.
-            // В данном случае, это для примера, мы можем проверять позднее истек ли токен или нет
+
             [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:@"VKExpirationDateKey"];
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
