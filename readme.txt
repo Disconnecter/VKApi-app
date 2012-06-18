@@ -1,0 +1,1 @@
+Simple realisation of api VK.com
